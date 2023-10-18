@@ -1,9 +1,34 @@
-import React from "react";
-import "./why.css";
+import React, { useEffect } from "react";
+import whyCached from "./why.css";
 import { IoIosArrowForward, IoIosCheckmarkCircle } from "react-icons/io";
 import IdeaImg from "../../assets/images/images.png";
 
 const Why = () => {
+  useEffect(() => {
+    const whycachedCSS = localStorage.getItem("whycachedCSS");
+    if (whycachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = whycachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(whyCached);
+
+      localStorage.setItem("whycachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
+
   return (
     <div className="why">
       <div className="why_top margin_left_right">

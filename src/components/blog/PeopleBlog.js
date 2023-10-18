@@ -1,11 +1,36 @@
-import React from "react";
-import "./peopleblog.css";
+import React, { useEffect } from "react";
+import peopleCached from "./peopleblog.css";
 import PeopleLeftImg from "../../assets/images/people_left.jpeg";
 import PeopleCenterImg from "../../assets/images/people_center.jpg";
 import PeopleRightImg from "../../assets/images/people_right.jpg";
 import PeopleRight2Img from "../../assets/images/people_right-2.jpg";
 
 const PeopleBlog = () => {
+  useEffect(() => {
+    const peoplecachedCSS = localStorage.getItem("peoplecachedCSS");
+    if (peoplecachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = peoplecachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(peopleCached);
+
+      localStorage.setItem("peoplecachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
+
   return (
     <div className="people_blog margin_left_right">
       <div className="people_blog_top">

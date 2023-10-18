@@ -1,5 +1,5 @@
-import React from "react";
-import "./otherservices.css";
+import React, { useEffect } from "react";
+import otherServcesCached from "./otherservices.css";
 import { IoIosArrowForward } from "react-icons/io";
 import DModelImg from "../../assets/images/image-65.png";
 import DigitalImg from "../../assets/images/image-66.png";
@@ -9,6 +9,31 @@ import DevelopImg from "../../assets/images/image-62.png";
 import OnlineImg from "../../assets/images/image-68.png";
 
 const OtherServices = () => {
+  useEffect(() => {
+    const othercachedCSS = localStorage.getItem("othercachedCSS");
+    if (othercachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = othercachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(otherServcesCached);
+
+      localStorage.setItem("othercachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
+
   return (
     <div className="other_services">
       <div className="margin_left_right">

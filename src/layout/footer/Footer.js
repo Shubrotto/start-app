@@ -1,5 +1,5 @@
-import React from "react";
-import "./footer.css";
+import React, { useEffect } from "react";
+import footerCached from "./footer.css";
 import Img from "../../assets/svg/s-1.svg";
 import { MdOutlineFacebook } from "react-icons/md";
 import { AiOutlineTwitter } from "react-icons/ai";
@@ -7,6 +7,31 @@ import { BiLogoGithub } from "react-icons/bi";
 import { PiDribbbleLogoFill } from "react-icons/pi";
 
 const Footer = () => {
+  useEffect(() => {
+    const footercachedCSS = localStorage.getItem("footercachedCSS");
+    if (footercachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = footercachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(footerCached);
+
+      localStorage.setItem("footercachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
+
   return (
     <div className="footer">
       <div className="footer_wrapper margin_left_right">

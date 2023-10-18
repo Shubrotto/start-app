@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./topbar.css";
+import React, { useEffect, useState } from "react";
+import topbarCached from "./topbar.css";
 import HeaderImg from "../../assets/svg/s-1.svg";
 import GetStartedImg from "../../assets/svg/path-49.svg";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -7,6 +7,31 @@ import { BiMenu } from "react-icons/bi";
 
 function Topbar() {
   const [toggle, setToggle] = useState(false);
+
+  useEffect(() => {
+    const topbarcachedCSS = localStorage.getItem("topbarcachedCSS");
+    if (topbarcachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = topbarcachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(topbarCached);
+
+      localStorage.setItem("topbarcachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
   return (
     <div className="topbar">
       <div className="topbar_left">

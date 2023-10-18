@@ -1,5 +1,5 @@
-import React from "react";
-import "./services.css";
+import React, { useEffect } from "react";
+import serviceCached from "./services.css";
 import MarketImg from "../../assets/images/image-58.png";
 import DevelopImg from "../../assets/images/image-62.png";
 import BussinesImg from "../../assets/images/image-64.png";
@@ -11,6 +11,31 @@ import DribbleImg from "../../assets/images/image-15.png";
 import QuoteImg from "../../assets/images/quote@2x.png";
 
 const Services = () => {
+  useEffect(() => {
+    const cachedCSS = localStorage.getItem("cachedCSS");
+    if (cachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(serviceCached);
+
+      localStorage.setItem("cachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
+
   return (
     <div className="services">
       <div className="top">

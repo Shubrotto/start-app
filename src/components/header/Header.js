@@ -1,8 +1,33 @@
-import React from "react";
-import "./header.css";
+import React, { useEffect } from "react";
+import headerCached from "./header.css";
 import top_img from "../../assets/images/illustration-1.png";
 
 const Header = () => {
+  useEffect(() => {
+    const headercachedCSS = localStorage.getItem("headercachedCSS");
+    if (headercachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = headercachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(headerCached);
+
+      localStorage.setItem("headercachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
+
   return (
     <div className="header">
       <div className="header_wrapper">

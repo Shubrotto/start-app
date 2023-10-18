@@ -1,5 +1,5 @@
-import React from "react";
-import "./meetsuper.css";
+import React, { useEffect } from "react";
+import meetCached from "./meetsuper.css";
 import Meet_super from "../../assets/images/image@2x.png";
 import Meet_super_2 from "../../assets/images/image-1@2x.png";
 import Meet_super_3 from "../../assets/images/image-2@2x.png";
@@ -10,6 +10,31 @@ import Social_icon_3 from "../../assets/images/social-2@2x.png";
 import { IoMdArrowDropright } from "react-icons/io";
 
 const MeetSuper = () => {
+  useEffect(() => {
+    const meetcachedCSS = localStorage.getItem("meetcachedCSS");
+    if (meetcachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = meetcachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(meetCached);
+
+      localStorage.setItem("meetcachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
+
   return (
     <div className="meet_super">
       <div className="meet_super_top margin_left_right">

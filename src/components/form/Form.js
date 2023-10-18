@@ -1,7 +1,32 @@
-import React from "react";
-import "./form.css";
+import React, { useEffect } from "react";
+import formCached from "./form.css";
 
 const Form = () => {
+  useEffect(() => {
+    const formCachedCSS = localStorage.getItem("formCachedCSS");
+    if (formCachedCSS) {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = formCachedCSS;
+      document.head.appendChild(styleTag);
+    } else {
+      const stringifyStyles = (stylesObject) => {
+        let styleString = "";
+        for (const selector in stylesObject) {
+          styleString += `${selector} { ${stylesObject[selector]} } `;
+        }
+        return styleString;
+      };
+
+      const cachedStylesString = stringifyStyles(formCached);
+
+      localStorage.setItem("formCachedCSS", cachedStylesString);
+
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = cachedStylesString;
+      document.head.appendChild(styleTag);
+    }
+  }, []);
+
   return (
     <div className="form">
       <div className="background_img">
